@@ -1,0 +1,23 @@
+# 依赖和构建产物
+node_modules
+dist
+build
+out
+
+# 环境配置
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 锁文件
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# 其他
+.DS_Store
+*.log
+coverage/
+public/
