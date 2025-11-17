@@ -606,7 +606,7 @@
   dependencies:
     js-tiktoken "^1.0.12"
 
-"@modelcontextprotocol/sdk@^1.18.2":
+"@modelcontextprotocol/sdk@^1.18.2", "@modelcontextprotocol/sdk@^1.22.0":
   version "1.22.0"
   resolved "https://registry.npmmirror.com/@modelcontextprotocol/sdk/-/sdk-1.22.0.tgz#b982143dfd36ef096b311d8ffadb2f91aabbbb1d"
   integrity sha512-VUpl106XVTCpDmTBil2ehgJZjhyLY2QZikzF8NvTXtLRF1CvO5iEE2UNZdVIUer35vFOwMKYeUGbjJtvPWan3g==

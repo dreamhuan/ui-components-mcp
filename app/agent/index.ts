@@ -73,7 +73,7 @@ export const graph = builder.compile();
 export async function invokeGraph({
   messages,
   threadId = uuidv4(),
-  userId = 'cmhbgrxn20000fbb0jbfq2ccl',
+  userId = '',
 }: {
   messages: MessageFieldWithRole[];
   threadId?: string;

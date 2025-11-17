@@ -7,6 +7,7 @@
     "web": "vite",
     "dev": "tsx watch app/index.ts",
     "test": "tsx app/test.ts",
+    "testmcp": "tsx app/testmcp.ts",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -21,6 +22,7 @@
     "@langchain/mcp-adapters": "^1.0.0",
     "@langchain/openai": "^1.0.0",
     "@langchain/tavily": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.22.0",
     "axios": "^1.13.2",
     "dotenv": "^16.6.1",
     "koa": "^3.0.3",

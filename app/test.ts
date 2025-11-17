@@ -4,7 +4,7 @@ import { invokeGraph } from './agent';
 main();
 
 async function main() {
-  const input = '杭州有什么好玩的？';
+  const input = '帮我生成一个简单的登录组件，使用React、TypeScript和tailwind css编写。';
   const messages = [{ role: 'user', content: input }];
 
   const result = await invokeGraph({ messages });

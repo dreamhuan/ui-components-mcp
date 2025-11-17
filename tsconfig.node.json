@@ -14,6 +14,10 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

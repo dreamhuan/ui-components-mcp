@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import z from 'zod/v3';
 import { StructuredTool, tool } from '@langchain/core/tools';
 import { TavilyCrawl, TavilySearch } from '@langchain/tavily';
 import { MultiServerMCPClient } from '@langchain/mcp-adapters';
@@ -6,15 +6,14 @@ import { MultiServerMCPClient } from '@langchain/mcp-adapters';
 // export const mcpClient = new MultiServerMCPClient({
 //   useStandardContentBlocks: true,
 //   mcpServers: {
-//     // https://lbs.amap.com/api/mcp-server/summary
-//     'amap-maps-streamableHTTP': {
-//       url: `https://mcp.amap.com/mcp?key=${process.env.AMAP_MAPS_API_KEY}`,
-//       type: 'http',
+//     'comp-mcp-server': {
+//       transport: 'http',
+//       url: 'http://localhost:3333/mcp',
 //     },
 //   },
 // });
 
-const mcpTools = [] as any[] // await mcpClient.getTools();
+const mcpTools = []; // await mcpClient.getTools();
 
 // Define tools
 const add: StructuredTool = tool(({ a, b }) => a + b, {

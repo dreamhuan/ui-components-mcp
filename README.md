@@ -13,9 +13,9 @@ yarn
 yarn dev
 ```
 
-## 测试
+## 其他
 ```sh
-npx -y @srbhptl39/mcp-superassistant-proxy@latest --config ./mcpconfig.json --outputTransport sse
+npx -y @srbhptl39/mcp-superassistant-proxy@latest --config ./mcpconfig.json
 ```
 
 ```sh

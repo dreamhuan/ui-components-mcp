@@ -16,6 +16,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
