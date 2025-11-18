@@ -3,17 +3,17 @@ import { StructuredTool, tool } from '@langchain/core/tools';
 import { TavilyCrawl, TavilySearch } from '@langchain/tavily';
 import { MultiServerMCPClient } from '@langchain/mcp-adapters';
 
-// export const mcpClient = new MultiServerMCPClient({
-//   useStandardContentBlocks: true,
-//   mcpServers: {
-//     'comp-mcp-server': {
-//       transport: 'http',
-//       url: 'http://localhost:3333/mcp',
-//     },
-//   },
-// });
+export const mcpClient = new MultiServerMCPClient({
+  useStandardContentBlocks: true,
+  mcpServers: {
+    'comp-mcp-server': {
+      transport: 'http',
+      url: 'http://localhost:3333/mcp',
+    },
+  },
+});
 
-const mcpTools = []; // await mcpClient.getTools();
+const mcpTools = await mcpClient.getTools();
 
 // Define tools
 const add: StructuredTool = tool(({ a, b }) => a + b, {
