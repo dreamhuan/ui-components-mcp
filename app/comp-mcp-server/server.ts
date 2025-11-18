@@ -3,16 +3,10 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 // 导入所有 AI 工具 (Tools)
 import { registerUiTools } from './tools/ui.js';
-import { registerIconTools } from './tools/icons.js';
-import { registerTokenTools } from './tools/tokens.js';
 import { registerDocumentationTools } from './tools/documentation.js';
 import { registerContextTools } from './tools/context.js';
-import { registerIconExportTools } from './tools/icon-exports.js';
 import { registerDemoTools } from './tools/demo.js';
 import { registerRadixTools } from './tools/radix.js';
-
-// 导入所有人类可用的资源/链接 (Resources)
-import { registerDocResources } from './resources/docs.js';
 
 // 1. 创建 MCP 服务器实例
 export const server = new McpServer({
@@ -22,15 +16,10 @@ export const server = new McpServer({
 
 // 2. 注册所有模块
 registerUiTools(server);
-registerIconTools(server);
-registerTokenTools(server);
 registerDocumentationTools(server);
 registerContextTools(server);
-registerIconExportTools(server);
 registerDemoTools(server);
 registerRadixTools(server);
-
-registerDocResources(server);
 
 // 3. 导出已完全配置的服务器
 export default server;

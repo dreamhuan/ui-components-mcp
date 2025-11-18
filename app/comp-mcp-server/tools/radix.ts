@@ -2,7 +2,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import z from 'zod/v3';
 import * as path from 'path';
-// 导入新的 Radix 路径
 import { RADIX_DOCS_PATH } from '../lib/paths.js';
 import { safeReadFile } from '../lib/safe-fs.js';
 
@@ -26,18 +25,20 @@ export function registerRadixTools(server: McpServer) {
       },
     },
     async ({ componentName }) => {
-      const safeName = path.basename(componentName); // 安全性：防止路径遍历
+      const safeName = path.basename(componentName);
       const fileName = `${safeName}.mdx`;
-
-      // 为 safeReadFile 使用正确的基路径
       const fileContent = await safeReadFile(RADIX_DOCS_PATH, fileName);
 
+      const resultData = {
+        name: fileName,
+        content: fileContent,
+      };
       return {
-        content: [{ type: 'text', text: `Successfully read Radix MDX: ${fileName}` }],
-        structuredContent: {
-          name: fileName,
-          content: fileContent, // 返回原始 MDX 内容
-        },
+        content: [
+          { type: 'text', text: `Successfully read Radix MDX: ${fileName}` },
+          { type: 'text', text: JSON.stringify(resultData, null, 2) },
+        ],
+        structuredContent: resultData,
       };
     }
   );

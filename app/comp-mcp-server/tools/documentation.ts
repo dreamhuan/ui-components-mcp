@@ -25,14 +25,17 @@ export function registerDocumentationTools(server: McpServer) {
       },
     },
     async ({ componentName }) => {
-      const safeName = path.basename(componentName); // 安全性：防止路径遍历
+      const safeName = path.basename(componentName);
       const fileName = `${safeName}.mdx`;
       const content = await safeReadFile(DOCS_CONTENT_PATH, fileName);
+
+      const resultData = { name: fileName, content };
       return {
         content: [
           { type: 'text', text: `Successfully retrieved documentation content for ${fileName}.` },
+          { type: 'text', text: JSON.stringify(resultData, null, 2) },
         ],
-        structuredContent: { name: fileName, content },
+        structuredContent: resultData,
       };
     }
   );

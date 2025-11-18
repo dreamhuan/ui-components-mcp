@@ -26,27 +26,31 @@ export function registerContextTools(server: McpServer) {
       },
     },
     async ({ packageName }) => {
-      const safeName = path.basename(packageName); // 安全性：防止路径遍历
+      const safeName = path.basename(packageName);
       let relativePath: string;
       let readBasePath: string;
 
       if (safeName === 'root') {
         relativePath = 'package.json';
-        readBasePath = DESIGN_SYSTEM_PATH; // 从根目录读取
+        readBasePath = DESIGN_SYSTEM_PATH;
       } else {
         relativePath = path.join(safeName, 'package.json');
-        readBasePath = PACKAGES_PATH; // 从 packages/ 目录读取
+        readBasePath = PACKAGES_PATH;
       }
 
       const fileContent = await safeReadFile(readBasePath, relativePath);
       const jsonData = JSON.parse(fileContent);
 
+      const resultData = {
+        path: relativePath,
+        data: jsonData,
+      };
       return {
-        content: [{ type: 'text', text: `Successfully parsed content of ${relativePath}.` }],
-        structuredContent: {
-          path: relativePath,
-          data: jsonData,
-        },
+        content: [
+          { type: 'text', text: `Successfully parsed content of ${relativePath}.` },
+          { type: 'text', text: JSON.stringify(resultData, null, 2) },
+        ],
+        structuredContent: resultData,
       };
     }
   );

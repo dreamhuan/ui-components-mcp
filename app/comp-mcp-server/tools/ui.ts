@@ -3,7 +3,6 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import z from 'zod/v3';
 import * as path from 'path';
 import { UI_SRC_PATH } from '../lib/paths.js';
-// 这种解析方法我们只需要 safeReadFile
 import { safeReadFile } from '../lib/safe-fs.js';
 
 /**
@@ -16,7 +15,6 @@ async function getUIComponentList(): Promise<string[]> {
   // 1. 's' 标志 (dotall)：允许 '.' 匹配换行符 (\n)，以处理多行导出块。
   // 2. '.*?': 对路径进行非贪婪匹配。
   const exportRegex = /export .*? from "\.\/(.*?)";/gs;
-
   const components: string[] = [];
   // 排除常见的非组件路径
   const EXCLUDE_PATHS = new Set(['utils', 'hooks', 'contexts', 'types', 'styles']);
@@ -28,7 +26,7 @@ async function getUIComponentList(): Promise<string[]> {
       components.push(modulePath);
     }
   }
-  return [...new Set(components)]; // 使用 Set 去重
+  return [...new Set(components)];
 }
 
 // 注册所有 UI 相关工具的函数
@@ -47,9 +45,13 @@ export function registerUiTools(server: McpServer) {
     },
     async () => {
       const components = await getUIComponentList();
+      const resultData = { components };
       return {
-        content: [{ type: 'text', text: `Found ${components.length} UI components.` }],
-        structuredContent: { components },
+        content: [
+          { type: 'text', text: `Found ${components.length} UI components.` },
+          { type: 'text', text: JSON.stringify(resultData, null, 2) }, // 追加 JSON 内容
+        ],
+        structuredContent: resultData,
       };
     }
   );
@@ -71,12 +73,17 @@ export function registerUiTools(server: McpServer) {
       },
     },
     async ({ componentName }) => {
-      const safeName = path.basename(componentName); // 安全性：防止路径遍历
+      const safeName = path.basename(componentName);
       const fileName = `${safeName}.tsx`;
       const content = await safeReadFile(UI_SRC_PATH, fileName);
+
+      const resultData = { name: fileName, content };
       return {
-        content: [{ type: 'text', text: `Successfully retrieved source code for ${fileName}.` }],
-        structuredContent: { name: fileName, content },
+        content: [
+          { type: 'text', text: `Successfully retrieved source code for ${fileName}.` },
+          { type: 'text', text: JSON.stringify(resultData, null, 2) }, // 追加 JSON 内容
+        ],
+        structuredContent: resultData,
       };
     }
   );

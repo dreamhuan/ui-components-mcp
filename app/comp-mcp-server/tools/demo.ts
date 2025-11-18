@@ -25,12 +25,17 @@ export function registerDemoTools(server: McpServer) {
       },
     },
     async ({ demoName }) => {
-      const safeName = path.basename(demoName); // 安全性：防止路径遍历
+      const safeName = path.basename(demoName);
       const fileName = `${safeName}.tsx`;
       const content = await safeReadFile(DEMO_PATH, fileName);
+
+      const resultData = { name: fileName, content };
       return {
-        content: [{ type: 'text', text: `Successfully retrieved demo example: ${fileName}` }],
-        structuredContent: { name: fileName, content },
+        content: [
+          { type: 'text', text: `Successfully retrieved demo example: ${fileName}` },
+          { type: 'text', text: JSON.stringify(resultData, null, 2) },
+        ],
+        structuredContent: resultData,
       };
     }
   );
