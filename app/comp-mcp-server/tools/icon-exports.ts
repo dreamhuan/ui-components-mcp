@@ -3,46 +3,50 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import z from 'zod/v3';
 import * as path from 'path';
 import { pascalCase } from 'change-case';
-// Import the validation tools
+// 导入校验工具
 import { safeStat } from '../lib/safe-fs.js';
 import { ICON_ASSETS_PATH } from '../lib/paths.js';
 
-// Function to register the icon export tool
+// 注册图标导出工具
 export function registerIconExportTools(server: McpServer) {
-  // [Tool 10: Icons] (Friendly error handling)
+  // [Tool 10: Icons] (友好的错误处理)
   server.registerTool(
     'getIconExportInfo',
     {
-      title: '[Icons] 获取图标导入信息',
-      description: '校验图标是否存在后，根据 build.ts 逻辑推断其 React 组件导出名称和导入路径。',
+      title: '[Icons] Get Icon Import Info',
+      description:
+        'After verifying the icon exists, infer its React component export name and import path based on build.ts logic.',
       inputSchema: {
-        iconPath: z.string().describe('图标在 assets 目录下的相对路径 (例如: "action/copy.svg")'),
+        iconPath: z
+          .string()
+          .describe(
+            'The relative path of the icon in the assets directory (e.g., "action/copy.svg")'
+          ),
       },
-
-      // --- THIS IS THE KEY CHANGE (这是关键更改) ---
-      // We make success fields nullable and add an error field.
-      // (我们将成功字段设为可空，并添加一个错误字段。)
       outputSchema: {
         path: z.string(),
-        category: z.string().nullable().describe('图标的分类 (例如: "action")'),
-        componentName: z.string().nullable().describe('React 组件的导出名称 (例如: "CopyIcon")'),
-        importStatement: z.string().nullable().describe('完整的 import 语句'),
-        error: z.string().nullable().describe('如果图标不存在，则返回错误信息'),
+        category: z.string().nullable().describe('The category of the icon (e.g., "action")'),
+        componentName: z
+          .string()
+          .nullable()
+          .describe('The React component export name (e.g., "CopyIcon")'),
+        importStatement: z.string().nullable().describe('The complete import statement'),
+        error: z
+          .string()
+          .nullable()
+          .describe('Returns an error message if the icon does not exist'),
       },
     },
     async ({ iconPath }) => {
-      // --- NEW VALIDATION (新增校验) ---
+      // --- 新增校验 ---
       try {
-        // We *try* to get the stats.
-        // (我们 *尝试* 获取状态。)
+        // 尝试获取文件状态
         await safeStat(ICON_ASSETS_PATH, iconPath);
       } catch (error: any) {
-        // If safeStat throws (e.g., "File not found"), we catch it.
-        // (如果 safeStat 抛出错误 (例如 "File not found")，我们捕获它。)
+        // 如果 safeStat 抛出错误 (例如 "File not found")，我们捕获它
         const friendlyError = `[Icon Validation Failed] The file "${iconPath}" does not exist in ICON_ASSETS_PATH.`;
 
-        // We return a SUCCESSFUL response containing the error message.
-        // (我们返回一个 *包含* 错误信息的 *成功* 响应。)
+        // 返回一个 *包含* 错误信息的 *成功* 响应
         return {
           content: [{ type: 'text', text: friendlyError }],
           structuredContent: {
@@ -50,15 +54,13 @@ export function registerIconExportTools(server: McpServer) {
             category: null,
             componentName: null,
             importStatement: null,
-            error: friendlyError, // The error is part of the data
+            error: friendlyError, // 错误信息是数据的一部分
           },
         };
       }
-      // --- END VALIDATION ---
+      // --- 校验结束 ---
 
-      // --- Success Path (File Exists) ---
-      // (成功路径 (文件存在))
-
+      // --- 成功路径 (文件存在) ---
       const category = path.dirname(iconPath);
       const baseName = path.basename(iconPath, '.svg');
       const componentName = `${pascalCase(baseName)}Icon`;
@@ -66,13 +68,15 @@ export function registerIconExportTools(server: McpServer) {
       if (category === '.') {
         const rootImportStatement = `import { ${componentName} } from '@vibeus/icons';`;
         return {
-          content: [{ type: 'text', text: `图标 ${iconPath} 对应的组件是 ${componentName}。` }],
+          content: [
+            { type: 'text', text: `Icon ${iconPath} corresponds to component ${componentName}.` },
+          ],
           structuredContent: {
             path: iconPath,
             category: category,
             componentName: componentName,
             importStatement: rootImportStatement,
-            error: null, // Explicitly no error
+            error: null, // 明确没有错误
           },
         };
       }
@@ -80,13 +84,15 @@ export function registerIconExportTools(server: McpServer) {
       const importStatement = `import { ${componentName} } from '@vibeus/icons/${category}';`;
 
       return {
-        content: [{ type: 'text', text: `图标 ${iconPath} 对应的组件是 ${componentName}。` }],
+        content: [
+          { type: 'text', text: `Icon ${iconPath} corresponds to component ${componentName}.` },
+        ],
         structuredContent: {
           path: iconPath,
           category: category,
           componentName: componentName,
           importStatement: importStatement,
-          error: null, // Explicitly no error
+          error: null, // 明确没有错误
         },
       };
     }

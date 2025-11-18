@@ -1,15 +1,15 @@
 // app/comp-mcp-server/resources/docs.ts
 import { McpServer, ResourceTemplate } from '@modelcontextprotocol/sdk/server/mcp.js';
 
-// Function to register all documentation-related resources
+// 注册所有文档相关的资源
 export function registerDocResources(server: McpServer) {
-  // [Resource 1: UI Docs]
+  // [资源 1: UI 文档]
   server.registerResource(
     'componentDocs',
     new ResourceTemplate('docs://vibeus/components/{name}'),
     {
-      title: 'Vibeus UI 组件文档',
-      description: '获取指定 Vibeus UI 组件的在线文档 URL。',
+      title: 'Vibeus UI Component Docs',
+      description: 'Get the online documentation URL for a specific Vibeus UI component.',
     },
     async (uri, { name }) => {
       const docUrl = `https://vibe-design-system.vercel.app/docs/${name}`;
@@ -17,19 +17,20 @@ export function registerDocResources(server: McpServer) {
         contents: [
           {
             uri: uri.href,
-            text: `组件 ${name} 的在线文档地址是: ${docUrl}`,
+            text: `The online documentation URL for component ${name} is: ${docUrl}`,
           },
         ],
       };
     }
   );
 
+  // [资源 2: Radix UI 文档]
   server.registerResource(
     'componentRadixUIDocs',
     new ResourceTemplate('docs://radix-ui/components/{name}'),
     {
-      title: 'Radix UI 组件文档',
-      description: '获取指定 Radix UI 组件的在线文档 URL。',
+      title: 'Radix UI Component Docs',
+      description: 'Get the online documentation URL for a specific Radix UI component.',
     },
     async (uri, { name }) => {
       const docUrl = `https://www.radix-ui.com/primitives/docs/components/${name}`;
@@ -37,20 +38,20 @@ export function registerDocResources(server: McpServer) {
         contents: [
           {
             uri: uri.href,
-            text: `RadixUI 组件 ${name} 的在线文档地址是: ${docUrl}`,
+            text: `The online documentation URL for RadixUI component ${name} is: ${docUrl}`,
           },
         ],
       };
     }
   );
 
-  // [Resource 2: Icon Docs]
+  // [资源 3: 图标库文档]
   server.registerResource(
     'iconDocs',
-    new ResourceTemplate('docs://vibeus/icons'), // Static URI
+    new ResourceTemplate('docs://vibeus/icons'), // 静态 URI
     {
-      title: 'Vibeus 图标库文档',
-      description: '获取 Vibeus 图标库的在线文档 URL。',
+      title: 'Vibeus Icon Library Docs',
+      description: 'Get the online documentation URL for the Vibeus Icon library.',
     },
     async uri => {
       const docUrl = 'https://vibe-design-system.vercel.app/docs/icon';
@@ -58,7 +59,7 @@ export function registerDocResources(server: McpServer) {
         contents: [
           {
             uri: uri.href,
-            text: `图标库的在线文档地址是: ${docUrl}`,
+            text: `The online documentation URL for the icon library is: ${docUrl}`,
           },
         ],
       };

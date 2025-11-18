@@ -5,29 +5,31 @@ import * as path from 'path';
 import { DEMO_PATH } from '../lib/paths.js';
 import { safeReadFile } from '../lib/safe-fs.js';
 
-// Function to register all demo-related tools
+// 注册所有与 Demo 相关的工具
 export function registerDemoTools(server: McpServer) {
   // [Tool 11: Demo]
   server.registerTool(
     'getComponentDemoSource',
     {
-      title: '[Demo] 获取组件 Demo 源代码',
+      title: '[Demo] Get Component Demo Source Code',
       description:
-        '从 `apps/docs/demo/` 目录获取 .tsx 示例代码 (由 mdx 中的 <DemoRenderer> 标签引用)。',
+        'Get the .tsx example code from the `apps/docs/demo/` directory (referenced by <DemoRenderer> in mdx).',
       inputSchema: {
-        demoName: z.string().describe('Demo 的名称 (例如: "accordion-demo", "button-demo")'),
+        demoName: z
+          .string()
+          .describe('The name of the demo (e.g., "accordion-demo", "button-demo")'),
       },
       outputSchema: {
-        name: z.string().describe('Demo 的文件名 (e.g., "accordion-demo.tsx")'),
-        content: z.string().describe('Demo .tsx 文件的源代码'),
+        name: z.string().describe('The demo file name (e.g., "accordion-demo.tsx")'),
+        content: z.string().describe('The source code of the .tsx demo file'),
       },
     },
     async ({ demoName }) => {
-      const safeName = path.basename(demoName); // Security
+      const safeName = path.basename(demoName); // 安全性：防止路径遍历
       const fileName = `${safeName}.tsx`;
       const content = await safeReadFile(DEMO_PATH, fileName);
       return {
-        content: [{ type: 'text', text: `成功获取 Demo 示例: ${fileName}` }],
+        content: [{ type: 'text', text: `Successfully retrieved demo example: ${fileName}` }],
         structuredContent: { name: fileName, content },
       };
     }

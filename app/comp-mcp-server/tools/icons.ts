@@ -6,8 +6,7 @@ import { ICON_ASSETS_PATH } from '../lib/paths.js';
 import { safeReadFile, safeReadDir } from '../lib/safe-fs.js';
 
 /**
- * [Icons] Gets the list of icon categories from 'packages/icons/src/assets'.
- * (从 'packages/icons/src/assets' 获取图标分类列表。)
+ * [Icons] 从 'packages/icons/src/assets' 获取图标分类列表。
  */
 async function getIconCategoryList(): Promise<string[]> {
   const entries = await safeReadDir(ICON_ASSETS_PATH);
@@ -15,11 +14,10 @@ async function getIconCategoryList(): Promise<string[]> {
 }
 
 /**
- * [Icons] Gets the list of icons within a specific category.
- * (获取特定分类下的图标列表。)
+ * [Icons] 获取特定分类下的图标列表。
  */
 async function getIconsByCategory(category: string): Promise<string[]> {
-  // path.basename ensures no traversal (e.g., "action" not "../action")
+  // path.basename 确保没有路径遍历 (例如, "action" 而不是 "../action")
   const safeCategory = path.basename(category);
   const entries = await safeReadDir(ICON_ASSETS_PATH, safeCategory);
   return entries
@@ -27,15 +25,15 @@ async function getIconsByCategory(category: string): Promise<string[]> {
     .map(entry => entry.name);
 }
 
-// Function to register all Icon-related tools
+// 注册所有与 Icon 相关的工具
 export function registerIconTools(server: McpServer) {
   // [Tool 3: Icons]
   server.registerTool(
     'listIconCategories',
     {
-      title: '[Icons] 列出所有图标分类',
+      title: '[Icons] List All Icon Categories',
       description:
-        '获取 `packages/icons/src/assets` 目录下的所有图标分类 (例如: "action", "av", "file")。',
+        'Get all icon categories from the `packages/icons/src/assets` directory (e.g., "action", "av", "file").',
       inputSchema: {},
       outputSchema: {
         categories: z.array(z.string()),
@@ -44,7 +42,7 @@ export function registerIconTools(server: McpServer) {
     async () => {
       const categories = await getIconCategoryList();
       return {
-        content: [{ type: 'text', text: `找到了 ${categories.length} 个图标分类。` }],
+        content: [{ type: 'text', text: `Found ${categories.length} icon categories.` }],
         structuredContent: { categories },
       };
     }
@@ -54,20 +52,20 @@ export function registerIconTools(server: McpServer) {
   server.registerTool(
     'listIconsByCategory',
     {
-      title: '[Icons] 列出分类下的所有图标',
-      description: '获取指定分类下的所有 .svg 图标文件名。',
+      title: '[Icons] List All Icons in a Category',
+      description: 'Get all .svg icon file names within a specific category.',
       inputSchema: {
-        category: z.string().describe('图标分类名 (例如: "action")'),
+        category: z.string().describe('The icon category name (e.g., "action")'),
       },
       outputSchema: {
         category: z.string(),
-        icons: z.array(z.string()).describe('SVG 文件名列表 (例如: "copy.svg")'),
+        icons: z.array(z.string()).describe('List of SVG file names (e.g., "copy.svg")'),
       },
     },
     async ({ category }) => {
       const icons = await getIconsByCategory(category);
       return {
-        content: [{ type: 'text', text: `分类 "${category}" 下有 ${icons.length} 个图标。` }],
+        content: [{ type: 'text', text: `Found ${icons.length} icons in category "${category}".` }],
         structuredContent: { category, icons },
       };
     }
@@ -77,15 +75,15 @@ export function registerIconTools(server: McpServer) {
   server.registerTool(
     'getIconSource',
     {
-      title: '[Icons] 获取图标SVG源码',
-      description: '获取指定图标的 .svg 源代码字符串。',
+      title: '[Icons] Get Icon SVG Source',
+      description: 'Get the .svg source code string for a specific icon.',
       inputSchema: {
-        category: z.string().describe('图标分类名 (例如: "action")'),
-        iconName: z.string().describe('图标文件名 (例如: "copy.svg")'),
+        category: z.string().describe('The icon category name (e.g., "action")'),
+        iconName: z.string().describe('The icon file name (e.g., "copy.svg")'),
       },
       outputSchema: {
-        name: z.string().describe('图标的完整路径'),
-        content: z.string().describe('SVG 源代码'),
+        name: z.string().describe('The full path of the icon'),
+        content: z.string().describe('The SVG source code'),
       },
     },
     async ({ category, iconName }) => {
@@ -95,7 +93,7 @@ export function registerIconTools(server: McpServer) {
 
       const content = await safeReadFile(ICON_ASSETS_PATH, relativePath);
       return {
-        content: [{ type: 'text', text: `成功获取 ${relativePath} 的 SVG 源码。` }],
+        content: [{ type: 'text', text: `Successfully retrieved SVG source for ${relativePath}.` }],
         structuredContent: { name: relativePath, content },
       };
     }

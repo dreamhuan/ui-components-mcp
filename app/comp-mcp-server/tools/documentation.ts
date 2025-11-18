@@ -5,28 +5,33 @@ import * as path from 'path';
 import { DOCS_CONTENT_PATH } from '../lib/paths.js';
 import { safeReadFile } from '../lib/safe-fs.js';
 
-// Function to register all documentation-related tools
+// 注册所有与文档相关的工具
 export function registerDocumentationTools(server: McpServer) {
   // [Tool 8: Documentation]
   server.registerTool(
     'getComponentDocumentation',
     {
-      title: '[Docs] 获取组件文档和API (MDX)',
-      description: '获取组件的 .mdx 文档源文件。该文件包含用法示例和手动维护的 Props API 表格。',
+      title: '[Docs] Get Component Documentation and API (MDX)',
+      description:
+        'Get the .mdx source file for a component. This file contains usage examples and manually maintained Props API tables.',
       inputSchema: {
-        componentName: z.string().describe('组件的基础文件名 (例如: "button", "tourtip")'),
+        componentName: z
+          .string()
+          .describe('The base file name of the component (e.g., "button", "tourtip")'),
       },
       outputSchema: {
-        name: z.string().describe('文档的文件名 (e.g., "tourtip.mdx")'),
-        content: z.string().describe('MDX 文件的原始内容'),
+        name: z.string().describe('The documentation file name (e.g., "tourtip.mdx")'),
+        content: z.string().describe('The raw content of the MDX file'),
       },
     },
     async ({ componentName }) => {
-      const safeName = path.basename(componentName); // Security
+      const safeName = path.basename(componentName); // 安全性：防止路径遍历
       const fileName = `${safeName}.mdx`;
       const content = await safeReadFile(DOCS_CONTENT_PATH, fileName);
       return {
-        content: [{ type: 'text', text: `成功获取 ${fileName} 的文档内容。` }],
+        content: [
+          { type: 'text', text: `Successfully retrieved documentation content for ${fileName}.` },
+        ],
         structuredContent: { name: fileName, content },
       };
     }

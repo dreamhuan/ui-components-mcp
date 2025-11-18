@@ -7,10 +7,9 @@ import { TOKEN_DATA_PATH } from '../lib/paths.js';
 import { safeReadFile } from '../lib/safe-fs.js';
 
 /**
- * [Tokens] Recursively finds all token JSON files in 'packages/token/src/assets/data'.
- * (递归查找 'packages/token/src/assets/data' 中所有的 token JSON 文件。)
- * @param dir The directory to scan.
- * @param relativeRoot The path relative to the token data root.
+ * [Tokens] 递归查找 'packages/token/src/assets/data' 中所有的 token JSON 文件。
+ * @param dir 要扫描的目录。
+ * @param relativeRoot 相对于 token data 根目录的路径。
  */
 async function getTokenFiles(dir: string, relativeRoot: string = ''): Promise<string[]> {
   let files: string[] = [];
@@ -21,33 +20,34 @@ async function getTokenFiles(dir: string, relativeRoot: string = ''): Promise<st
     if (entry.isDirectory()) {
       files = files.concat(await getTokenFiles(path.join(dir, entry.name), entryRelativePath));
     } else if (entry.isFile() && entry.name.endsWith('.json')) {
-      files.push(entryRelativePath.replace(/\\/g, '/')); // Normalize path separators
+      files.push(entryRelativePath.replace(/\\/g, '/')); // 规范化路径分隔符
     }
   }
   return files;
 }
 
-// Function to register all Token-related tools
+// 注册所有与 Token 相关的工具
 export function registerTokenTools(server: McpServer) {
   // [Tool 6: Tokens]
   server.registerTool(
     'listDesignTokenFiles',
     {
-      title: '[Tokens] 列出所有设计令牌JSON文件',
-      description: '递归列出 `packages/token/src/assets/data` 目录中所有可用的 .json 令牌文件。',
+      title: '[Tokens] List All Design Token JSON Files',
+      description:
+        'Recursively list all available .json token files in the `packages/token/src/assets/data` directory.',
       inputSchema: {},
       outputSchema: {
         files: z
           .array(z.string())
           .describe(
-            '相对于 data 目录的令牌文件路径 (例如: "color/primitive.json", "gap/web.json")'
+            'Token file paths relative to the data directory (e.g., "color/primitive.json", "gap/web.json")'
           ),
       },
     },
     async () => {
       const files = await getTokenFiles(TOKEN_DATA_PATH);
       return {
-        content: [{ type: 'text', text: `找到了 ${files.length} 个令牌定义文件。` }],
+        content: [{ type: 'text', text: `Found ${files.length} token definition files.` }],
         structuredContent: { files },
       };
     }
@@ -57,28 +57,27 @@ export function registerTokenTools(server: McpServer) {
   server.registerTool(
     'getDesignTokenData',
     {
-      title: '[Tokens] 获取设计令牌数据',
-      description: '读取并解析一个设计令牌 .json 文件的内容。',
+      title: '[Tokens] Get Design Token Data',
+      description: 'Read and parse the content of a design token .json file.',
       inputSchema: {
         filePath: z
           .string()
           .describe(
-            '令牌文件的路径 (来自 `listDesignTokenFiles` 的输出，例如: "color/primitive.json")'
+            'The path to the token file (from `listDesignTokenFiles` output, e.g., "color/primitive.json")'
           ),
       },
       outputSchema: {
         filePath: z.string(),
-        // The data can be any valid JSON object, so z.any() is appropriate
-        // (数据可以是任何有效的 JSON 对象，因此 z.any() 是合适的)
-        data: z.any().describe('已解析的 JSON 令牌数据'),
+        // 数据可以是任何有效的 JSON 对象，因此 z.any() 是合适的
+        data: z.any().describe('The parsed JSON token data'),
       },
     },
     async ({ filePath }) => {
-      // safeReadFile will handle security validation
+      // safeReadFile 将处理安全验证
       const fileContent = await safeReadFile(TOKEN_DATA_PATH, filePath);
       const jsonData = JSON.parse(fileContent);
       return {
-        content: [{ type: 'text', text: `成功解析令牌文件: ${filePath}` }],
+        content: [{ type: 'text', text: `Successfully parsed token file: ${filePath}` }],
         structuredContent: {
           filePath: filePath,
           data: jsonData,

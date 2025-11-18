@@ -1,7 +1,7 @@
 // app/comp-mcp-server/server.ts
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
-// Import all TOOLS (导入所有 AI 工具)
+// 导入所有 AI 工具 (Tools)
 import { registerUiTools } from './tools/ui.js';
 import { registerIconTools } from './tools/icons.js';
 import { registerTokenTools } from './tools/tokens.js';
@@ -11,17 +11,16 @@ import { registerIconExportTools } from './tools/icon-exports.js';
 import { registerDemoTools } from './tools/demo.js';
 import { registerRadixTools } from './tools/radix.js';
 
-// Import all RESOURCES (导入所有人类可用的资源/链接)
+// 导入所有人类可用的资源/链接 (Resources)
 import { registerDocResources } from './resources/docs.js';
 
-// 1. Create MCP server instance
+// 1. 创建 MCP 服务器实例
 export const server = new McpServer({
   name: 'vibeus-design-system-mcp',
-  version: '1.0.0', // Updated version for re-adding resources
+  version: '1.0.0', // 更新版本以重新添加资源
 });
 
-// 2. Register all modules
-// (注册所有 AI 工具)
+// 2. 注册所有模块
 registerUiTools(server);
 registerIconTools(server);
 registerTokenTools(server);
@@ -31,8 +30,7 @@ registerIconExportTools(server);
 registerDemoTools(server);
 registerRadixTools(server);
 
-// (注册所有资源链接)
 registerDocResources(server);
 
-// 3. Export the fully configured server
+// 3. 导出已完全配置的服务器
 export default server;

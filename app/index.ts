@@ -1,8 +1,7 @@
-// This file remains unchanged as it correctly sets up the Express server
-// and delegates MCP requests to the 'server.ts' module.
+// app/index.ts
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import express from 'express';
-// Note the '.js' extension for ES Module imports
+// 注意 ES Module 导入需要 '.js' 扩展名
 import server from './comp-mcp-server/server.js';
 
 const app = express();
@@ -24,9 +23,11 @@ const port = parseInt(process.env.PORT || '3333');
 app
   .listen(port, () => {
     // 服务器启动日志
-    console.log(`您的本地组件库 MCP 服务器正在运行: http://localhost:${port}/mcp`);
+    console.log(
+      `Your local component library MCP server is running at: http://localhost:${port}/mcp`
+    );
   })
   .on('error', error => {
-    console.error('服务器错误:', error);
+    console.error('Server error:', error);
     process.exit(1);
   });
