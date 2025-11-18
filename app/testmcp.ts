@@ -8,7 +8,7 @@ async function testConnect() {
   async function createClient() {
     const args = [
       'http',
-      'comp-mcp-server',
+      'vibeus-design-system-mcp',
       {
         type: 'http',
         url: 'http://localhost:3333/mcp',
@@ -54,7 +54,7 @@ async function testRun() {
   const mcpClient = new MultiServerMCPClient({
     useStandardContentBlocks: true,
     mcpServers: {
-      'comp-mcp-server': {
+      'vibeus-design-system-mcp': {
         url: 'http://localhost:3333/mcp',
         type: 'http',
       },

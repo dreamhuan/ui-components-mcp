@@ -6,7 +6,7 @@ import { MultiServerMCPClient } from '@langchain/mcp-adapters';
 export const mcpClient = new MultiServerMCPClient({
   useStandardContentBlocks: true,
   mcpServers: {
-    'comp-mcp-server': {
+    'vibeus-design-system-mcp': {
       transport: 'http',
       url: 'http://localhost:3333/mcp',
     },
