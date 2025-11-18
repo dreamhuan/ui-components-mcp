@@ -24,6 +24,26 @@ export function registerDocResources(server: McpServer) {
     }
   );
 
+  server.registerResource(
+    'componentRadixUIDocs',
+    new ResourceTemplate('docs://radix-ui/components/{name}'),
+    {
+      title: 'Radix UI 组件文档',
+      description: '获取指定 Radix UI 组件的在线文档 URL。',
+    },
+    async (uri, { name }) => {
+      const docUrl = `https://www.radix-ui.com/primitives/docs/components/${name}`;
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            text: `RadixUI 组件 ${name} 的在线文档地址是: ${docUrl}`,
+          },
+        ],
+      };
+    }
+  );
+
   // [Resource 2: Icon Docs]
   server.registerResource(
     'iconDocs',

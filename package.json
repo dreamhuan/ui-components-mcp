@@ -24,6 +24,7 @@
     "@langchain/tavily": "^1.0.0",
     "@modelcontextprotocol/sdk": "^1.22.0",
     "axios": "^1.13.2",
+    "change-case": "^5.4.4",
     "dotenv": "^16.6.1",
     "koa": "^3.0.3",
     "langchain": "^1.0.1",

@@ -1,23 +1,18 @@
 // app/comp-mcp-server/lib/safe-fs.ts
-import { promises as fs, Dirent } from 'fs';
+// Import 'promises' as fs, and 'Dirent' / 'Stats' (types) from the main 'fs' module
+import { promises as fs, Dirent, Stats } from 'fs';
 import * as path from 'path';
 
 /**
  * A secure file reader that prevents path traversal attacks.
- * It ensures the requested file is *within* the allowed base directory.
- * (一个安全的文件读取器，防止路径遍历攻击。它确保请求的文件位于允许的基础目录内。)
- * @param allowedBaseDir The directory reading is confined to.
- * @param unsafeRelativePath The user-provided sub-path.
- * @returns The content of the file.
+ * (一个安全的文件读取器，防止路径遍历攻击。)
  */
 export async function safeReadFile(
   allowedBaseDir: string,
   unsafeRelativePath: string
 ): Promise<string> {
-  // Resolve the full path
   const fullPath = path.resolve(allowedBaseDir, unsafeRelativePath);
 
-  // Security Check: Ensure the resolved path is still inside the allowed directory
   if (!fullPath.startsWith(allowedBaseDir)) {
     throw new Error('Access denied: Path traversal detected.');
   }
@@ -33,16 +28,11 @@ export async function safeReadFile(
 /**
  * A secure directory lister that prevents path traversal.
  * (一个安全的目录读取器，防止路径遍历。)
- * @param allowedBaseDir The directory reading is confined to.
- *Services
- * @param unsafeRelativePath The user-provided sub-path.
- * @returns A list of directory entry names.
  */
 export async function safeReadDir(
   allowedBaseDir: string,
   unsafeRelativePath: string = ''
 ): Promise<Dirent[]> {
-  // This type 'Dirent' is now correctly imported
   const fullPath = path.resolve(allowedBaseDir, unsafeRelativePath);
 
   if (!fullPath.startsWith(allowedBaseDir)) {
@@ -54,5 +44,31 @@ export async function safeReadDir(
   } catch (error) {
     console.error(`[MCP Error] Failed to read dir: ${fullPath}`, error);
     throw new Error(`Directory not found or unreadable: ${unsafeRelativePath}`);
+  }
+}
+
+// --- NEW FUNCTION (新增函数) ---
+
+/**
+ * A secure file stat function that prevents path traversal.
+ * (一个安全的文件状态检查函数，防止路径遍历。)
+ * @param allowedBaseDir The directory reading is confined to.
+ * @param unsafeRelativePath The user-provided sub-path.
+ * @returns fs.Stats object if the file exists.
+ */
+export async function safeStat(allowedBaseDir: string, unsafeRelativePath: string): Promise<Stats> {
+  const fullPath = path.resolve(allowedBaseDir, unsafeRelativePath);
+
+  // Security Check: Ensure the resolved path is still inside the allowed directory
+  if (!fullPath.startsWith(allowedBaseDir)) {
+    throw new Error('Access denied: Path traversal detected.');
+  }
+
+  try {
+    // fs.stat will throw an error if the file doesn't exist
+    return await fs.stat(fullPath);
+  } catch (error) {
+    // This error (e.g., ENOENT) is the validation we want
+    throw new Error(`File not found or inaccessible: ${unsafeRelativePath}`);
   }
 }
