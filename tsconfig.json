@@ -1,7 +1,33 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    /* 基础配置 */
+    "target": "ES2022" /* 生成较新的 JS 语法 (Node 16+ 支持良好) */,
+    "lib": ["ES2023"] /* 仅包含 JS 标准库，**剔除 DOM** (防止误用浏览器 API) */,
+    "module": "NodeNext" /* 使用现代 Node 模块系统 (支持 ESM 和 CJS) */,
+    "moduleResolution": "NodeNext" /* 配合 module 使用 */,
+    "moduleDetection": "force",
+
+    /* 编译输出 */
+    "rootDir": "./app" /* 源码目录 */,
+    "outDir": "./dist" /* 编译后的 JS 输出目录 */,
+    "sourceMap": true /* 生成 source map 方便调试 */,
+    "removeComments": true /* 生产环境代码更干净 */,
+    "noEmit": false /* 允许生成 JS 文件 (后端需要运行编译后的代码) */,
+
+    /* 互操作性 */
+    "esModuleInterop": true /* 允许 import express from 'express' (处理 CJS 兼容) */,
+    "forceConsistentCasingInFileNames": true /* 强制文件名大小写一致 */,
+    "allowSyntheticDefaultImports": true,
+
+    /* 类型检查 (严格模式) */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true /* 跳过 node_modules 的类型检查以提高速度 */
+  },
+  "include": ["app/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }
