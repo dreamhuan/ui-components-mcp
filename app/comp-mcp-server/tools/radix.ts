@@ -25,6 +25,7 @@ export function registerRadixTools(server: McpServer) {
       },
     },
     async ({ componentName }) => {
+      console.log('MCP tool calls getRadixComponentMdx', componentName);
       const safeName = path.basename(componentName);
       const fileName = `${safeName}.mdx`;
       const fileContent = await safeReadFile(RADIX_DOCS_PATH, fileName);

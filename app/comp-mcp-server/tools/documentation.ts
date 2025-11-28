@@ -25,6 +25,7 @@ export function registerDocumentationTools(server: McpServer) {
       },
     },
     async ({ componentName }) => {
+      console.log('MCP tool calls getComponentDocumentation', componentName);
       const safeName = path.basename(componentName);
       const fileName = `${safeName}.mdx`;
       const content = await safeReadFile(DOCS_CONTENT_PATH, fileName);

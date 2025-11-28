@@ -26,6 +26,7 @@ export function registerContextTools(server: McpServer) {
       },
     },
     async ({ packageName }) => {
+      console.log('MCP tool calls getPackageJson', packageName);
       const safeName = path.basename(packageName);
       let relativePath: string;
       let readBasePath: string;

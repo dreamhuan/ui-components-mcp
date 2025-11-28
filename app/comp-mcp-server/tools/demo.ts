@@ -25,6 +25,7 @@ export function registerDemoTools(server: McpServer) {
       },
     },
     async ({ demoName }) => {
+      console.log('MCP tool calls getComponentDemoSource', demoName);
       const safeName = path.basename(demoName);
       const fileName = `${safeName}.tsx`;
       const content = await safeReadFile(DEMO_PATH, fileName);

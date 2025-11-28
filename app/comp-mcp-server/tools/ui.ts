@@ -44,6 +44,7 @@ export function registerUiTools(server: McpServer) {
       },
     },
     async () => {
+      console.log('MCP tool calls listUIComponents');
       const components = await getUIComponentList();
       const resultData = { components };
       return {
@@ -73,6 +74,7 @@ export function registerUiTools(server: McpServer) {
       },
     },
     async ({ componentName }) => {
+      console.log('MCP tool calls getUIComponentSource', componentName);
       const safeName = path.basename(componentName);
       const fileName = `${safeName}.tsx`;
       const content = await safeReadFile(UI_SRC_PATH, fileName);
