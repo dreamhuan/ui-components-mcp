@@ -39,60 +39,25 @@ platform is solely responsible for content management and presentation.
 The project uses the following tech stack: React + TypeScript + TailwindCSS +
 the `@vibeus/ui` component library. Vite is used for compilation and execution.
 
-The project's `package.json` is as follows:
+The project's mainly dependence:
 
 ```json
 {
-  "name": "@vibeus/chorus-web",
-  "private": true,
-  "version": "0.0.1",
-  "type": "module",
-  "scripts": {
-    "dev": "tsx ./scripts/launch.ts",
-    "build": "bun x tsc -b && vite build",
-    "preview": "bun run build && vite preview",
-    "deploy:beta": "bun x tsc -b && vite build --mode beta && wrangler deploy --env beta",
-    "deploy:dev": "bun x tsc -b && vite build --mode dev && wrangler deploy --env dev",
-    "deploy:prod": "bun x tsc -b && vite build --mode prod && wrangler deploy --env prod",
-    "cf-typegen": "wrangler types",
-    "chorus-cli": "tsx scripts/chorus-cli.ts"
-  },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
-    "@vibeus/chorus-core": "workspace:*",
     "@vibeus/icons": "^1.6.0",
     "@vibeus/ui": "^2.1.1",
-    "axios": "^1.10.0",
-    "gpt-tokenizer": "^3.0.1",
-    "itty-router": "^5.0.18",
-    "lodash.debounce": "^4.0.8",
-    "mitt": "^3.0.1",
-    "path": "^0.12.7",
-    "react-hook-form": "^7.61.0",
-    "react-markdown": "^10.1.0",
+    "react": "^19.0.0",
     "react-redux": "^9.2.0",
     "react-router": "^7.6.2",
-    "remark-gfm": "^4.0.1"
+    "react-hook-form": "^7.61.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.36",
-    "@tailwindcss/vite": "^4.1.10",
-    "@types/cloudflare-turnstile": "^0.2.2",
-    "@types/lodash.debounce": "^4.0.9",
-    "@types/react-dom": "^19.1.2",
-    "@vibeus/chorus-types": "workspace:*",
-    "@vitejs/plugin-basic-ssl": "^2.0.0",
-    "@vitejs/plugin-react": "^4.4.1",
-    "@vitejs/plugin-react-swc": "^3.8.0",
     "tailwindcss": "^4.1.10",
     "tailwindcss-animate": "^1.0.7",
     "tw-animate-css": "^1.3.5",
     "typescript": "~5.7.2",
     "vite": "^6.3.5"
-  },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
   }
 }
 ```

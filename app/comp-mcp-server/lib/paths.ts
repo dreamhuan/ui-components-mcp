@@ -3,7 +3,7 @@ import * as path from 'path';
 
 // --- 'design-system' 仓库的基础路径 ---
 // 所有路径均从用户的主目录安全解析
-export const DESIGN_SYSTEM_PATH = path.resolve(process.env.HOME || '~', 'workspace/vibe/design-system');
+export const DESIGN_SYSTEM_PATH = path.resolve(process.env.HOME || '~', 'workspace/design-system');
 export const UI_SRC_PATH = path.join(DESIGN_SYSTEM_PATH, 'packages/ui/src');
 export const PACKAGES_PATH = path.join(DESIGN_SYSTEM_PATH, 'packages');
 export const DOCS_CONTENT_PATH = path.join(DESIGN_SYSTEM_PATH, 'apps/docs/content/docs');
@@ -13,5 +13,5 @@ export const DEMO_PATH = path.join(DESIGN_SYSTEM_PATH, 'apps/docs/demo');
 // 该路径指向 design-system 仓库之外，这是符合预期的。
 export const RADIX_DOCS_PATH = path.resolve(
   process.env.HOME || '~',
-  'workspace/vibe/website/data/primitives/docs/components'
+  'workspace/radix/website/data/primitives/docs/components'
 );
